@@ -52,7 +52,7 @@
                                     <div class="text-center">
                                         <h4 class="text-dark mb-4">Project Megumi</h4>
                                     </div>
-                                    <form class="user">
+                                    <form class="user" method="post" action="">
                                         <div class="form-group"><input class="form-control form-control-user" type="username" id="username" placeholder="Username" name="password"></div>
                                         <div class="form-group"><input class="form-control form-control-user" type="password" id="password" placeholder="Password" name="password"></div><button class="btn btn-primary btn-block text-white btn-user" type="submit">Login</button>
                                         <hr>

@@ -1,5 +1,6 @@
 <?php
     session_start();
+    require ('connection.php');
     $irrigationurl = "https://industrial.ubidots.com/api/v1.6/devices/ProjectMegumi/irrigationtime/values/?page=1&token=BBFF-zpj7XVFimwcvqL71LE1RvjlF2USqP0";
     if (!isset($_SESSION["username"])) {
         header("Location: login.php");
@@ -15,9 +16,11 @@
         $irrigation = json_decode($jsonirrigation, true);
 
         $username =  $_SESSION["username"];
-
-        $humidity = "SELECT Humidity FROM `data` WHERE nodeid=1";
-        $water = "SELECT waterlevel FROM `data` WHERE nodeid=1";
+        
+        $humidityq = "SELECT Humidity FROM data WHERE nodeid=1";
+        $waterq = "SELECT waterlevel FROM data WHERE nodeid=1";
+        $humidity = mysqli_query($con, $humidityq)
+        $water = mysqli_query($con, $waterq)
 
         $status = "ree";
 
