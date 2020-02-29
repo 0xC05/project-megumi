@@ -1,3 +1,39 @@
+<?php
+    session_start();
+    require ('connection.php');
+    if (!isset($_SESSION["username"])) {
+        header("Location: login.php");
+        exit();
+    } else if (isset($_POST['submit'])) {
+        if($_POST['nodeid'] == "1"){
+            $postnodeid = 1;
+        }
+        if($_POST['nodeid'] == "2"){
+            $postnodeid = 2;
+        }
+        if($_POST['cropsetting'] == "paddy"){
+            $postcrop = "paddy";
+        }
+        if($_POST['cropsetting'] == "nonpaddy"){
+            $postcrop = "nonpaddy";
+        }
+        $updatequery = "UPDATE threshold SET type='$postcrop' WHERE nodeId=$postnodeid";
+        $updateexec = mysqli_query($con, $updatequery);
+        header("Refresh:0");
+    } else {
+        $username =  $_SESSION["username"];
+        
+        $query1 = "SELECT * FROM threshold WHERE nodeId=1";
+        $query2 = "SELECT * FROM threshold WHERE nodeId=2";
+        $query1output = mysqli_query($con, $query1);
+        $query2output = mysqli_query($con, $query2);
+        $query1parsed = mysqli_fetch_assoc($query1output);
+        $query2parsed = mysqli_fetch_assoc($query2output);
+        $node1crop = $query1parsed["type"];
+        $node2crop = $query2parsed["type"];
+
+    }
+?>
 <!DOCTYPE html>
 <html>
 
@@ -35,9 +71,9 @@
                             </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow" role="presentation">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">&lt;placeholder&gt;</span><img class="border rounded-circle img-profile" src="assets/img/avatars/user.jpg"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small"><?php echo $username?></span><img class="border rounded-circle img-profile" src="assets/img/avatars/user.jpg"></a>
                                     <div
-                                        class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="index.html"><i class="fas fa-chart-bar fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Dashboard</a><a class="dropdown-item" role="presentation" href="settings.html"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
+                                        class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="index.php"><i class="fas fa-chart-bar fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Dashboard</a><a class="dropdown-item" role="presentation" href="settings.php"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
                                         <a
                                             class="dropdown-item" role="presentation" href="logout.php"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a>
                                 </div>
@@ -58,28 +94,34 @@
                                 <form>
                                     <div class="form-row">
                                         <div class="col">
-                                            <div class="form-group"><label for="username"><strong>Username</strong></label><input class="form-control" type="text" placeholder="<placeholder>" name="username"></div>
+                                            <div class="form-group"><label for="username"><strong>Username</strong></label><input class="form-control" type="text" placeholder="<?php echo $username?>" name="username" disabled=""></div>
                                         </div>
                                     </div>
-                                    <div class="form-group"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
                                 </form>
                             </div>
                         </div>
                         <div class="card shadow">
                             <div class="card-header py-3">
-                                <p class="text-primary m-0 font-weight-bold">Threshold Settings</p>
+                                <p class="text-primary m-0 font-weight-bold">Crop Settings</p>
                             </div>
                             <div class="card-body">
-                                <form>
+                                <form action="" method="post">
                                     <div class="form-row">
                                         <div class="col">
-                                            <div class="form-group"><label for="city"><strong>Humidity Level</strong><br></label><input class="form-control" type="text" placeholder="<placeholder>" name="humiditythresh"></div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-group"><label for="country"><strong>Water Level</strong></label><input class="form-control" type="text" placeholder="<placeholder>" name="waterthresh"></div>
+                                            <p><strong>Current Node Settings:-</strong></p>
+                                            <p><strong>Node 1 - <?php echo $node1crop?></strong><br><strong>Node 2 - <?php echo $node2crop?></strong></p>
                                         </div>
                                     </div>
-                                    <div class="form-group"><button class="btn btn-primary btn-sm" type="submit">Save&nbsp;Settings</button></div>
+                                    <hr>
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-group"><label for="node"><strong>Node ID</strong><br></label><select class="form-control" name="nodeid"><option value="1" selected="">1</option><option value="2">2</option></select></div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group"><label for="crop"><strong>Crop Type</strong></label><select class="form-control" name="cropsetting"><option value="paddy" selected="">Paddy</option><option value="nonpaddy">Non-Paddy</option></select></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group"><button class="btn btn-primary btn-sm" type="submit" name="submit">Save&nbsp;Settings</button></div>
                                 </form>
                             </div>
                         </div>
@@ -98,5 +140,4 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="assets/js/theme.js"></script>
 </body>
-
 </html>

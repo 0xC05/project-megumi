@@ -9,7 +9,7 @@
         $password = stripslashes($_REQUEST['password']);
         $password = mysqli_real_escape_string($con, $password);
 
-        $query = "SELECT * FROM `$table_name` WHERE username='$username' AND password='$password'";
+        $query = "SELECT * FROM $table_name WHERE username='$username' AND password='$password'";
         $result = mysqli_query($con, $query) or die(mysqli_error());
         $rows = mysqli_num_rows($result);
         if ($rows == 1)
@@ -53,11 +53,11 @@
                                         <h4 class="text-dark mb-4">Project Megumi</h4>
                                     </div>
                                     <form class="user" method="post" action="">
-                                        <div class="form-group"><input class="form-control form-control-user" type="username" id="username" placeholder="Username" name="password"></div>
+                                        <div class="form-group"><input class="form-control form-control-user" type="username" id="username" placeholder="Username" name="username"></div>
                                         <div class="form-group"><input class="form-control form-control-user" type="password" id="password" placeholder="Password" name="password"></div><button class="btn btn-primary btn-block text-white btn-user" type="submit">Login</button>
                                         <hr>
                                     </form>
-                                    <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
+                                    <div class="text-center"><a class="small" href="login.php">Forgot Password?</a></div>
                                 </div>
                             </div>
                         </div>

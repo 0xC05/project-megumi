@@ -17,12 +17,14 @@
 
         $username =  $_SESSION["username"];
         
-        $humidityq = "SELECT Humidity FROM data WHERE nodeid=1";
-        $waterq = "SELECT waterlevel FROM data WHERE nodeid=1";
-        $humidity = mysqli_query($con, $humidityq)
-        $water = mysqli_query($con, $waterq)
+        $query = "SELECT * FROM data WHERE nodeid=1";
+        $queryoutput = mysqli_query($con, $query);
+        $queryparsed = mysqli_fetch_assoc($queryoutput);
+        $humidity = $queryparsed["Humidity"];
+        $water = $queryparsed["waterlevel"];
 
         $status = "ree";
+        $statuscolor = "#ffffff";
 
         header("refresh: 30"); 
     }
